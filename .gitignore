@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+preview-screenshot*.png
 
 # debug
 npm-debug.log*
@@ -30,12 +31,25 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (examples are intentionally kept, real env files are not)
+.env
+.env.local
+.env*.local
+!.env*.example
 
 # vercel
 .vercel
 
+# local agent/session state
+.claude/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# foundry / contracts
+contracts/node_modules
+contracts/out/
+contracts/cache/
+contracts/lib/
+contracts/foundry.lock

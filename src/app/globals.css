@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f5f2ea;
+  --paper-dim: #eeeadf;
+  --ink: #201d17;
+  --ink-soft: #57534a;
+  --navy: #1e3a5c;
+  --navy-deep: #142943;
+  --terracotta: #c0532d;
+  --terracotta-soft: #e2a688;
+  --line: #ddd6c7;
+  --card: #fbf9f3;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-soft: var(--terracotta-soft);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background-image:
+    linear-gradient(to right, rgba(32, 29, 23, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(32, 29, 23, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.font-serif-cjk {
+  font-family: var(--font-serif), serif;
+}
+
+.font-mono-tag {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.04em;
+}
+
+::selection {
+  background-color: var(--terracotta-soft);
+  color: var(--navy-deep);
 }
