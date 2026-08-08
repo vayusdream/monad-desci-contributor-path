@@ -25,7 +25,7 @@ DeSci Contributor Path 不是一个交易市场，也不是通用的任务众包
    - **作用**: 提供 5 步标准化引导流程，负责贡献证明 (Proof) 的最终校验提交，并在 Monad 链上现场生成并铸造不可篡改的 Contributor Credential (ERC-721) NFT。
 
 2. **DeSci Onboarding Hub (Zealy / 社区任务孵化池)**
-   - 🔗 **社区任务池**: [DeSci Onboarding Hub on Zealy](https://zealy.io/cw/descionboardinghub/questboard)
+   - 🔗 **社区任务池**: [DeSci Onboarding Hub on Zealy](https://zealy.io/cw/descionboardinghub/)
    - **定位**: 社区日常高频 Quest 分发与生态增长引擎。
    - **作用**: 提供更丰富细分的日常任务（如 Peer Review、项目分析、翻译、Grant 申请等），结合 XP 积分排行榜与周期性 Prize 抽奖，作为 DApp 的流量入口与链下任务源。
 
