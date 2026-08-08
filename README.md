@@ -17,7 +17,7 @@ DeSci Contributor Path 不是一个交易市场，也不是通用的任务众包
 
 ## 三、产品生态与架构 (Product Ecosystem & Architecture)
 
-本项目采用**“链下社区运营孵化 + 链上凭证结算”**的双层架构，构建 DeSci 贡献者的完整成长飞轮：
+本项目采用用“**链下社区运营孵化 + 链上凭证结算**”的双层架构的双层架构，构建 DeSci 贡献者的完整成长飞轮：
 
 1. **DeSci Contributor Path (Core DApp / 链上凭证结算中心)**
    - 🔗 **Demo 体验地址**: [DeSci Contributor Path](https://descimod.vercel.app/)
