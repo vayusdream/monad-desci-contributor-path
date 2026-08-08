@@ -156,7 +156,7 @@ export const TRACKS: Record<TrackId, Track> = {
       },
       {
         title: "去中心化科研出版",
-        desc: "理解 DeSci Codex 用 IPFS 持久化标识符解决论文链接失效的设计思路",
+        desc: "用 IPFS 持久化标识符解决论文链接失效问题",
         url: "https://www.desci.com/blog/how-desci-codex-makes-scientific-research-durable-reusable-and-ai-ready",
       },
     ],
