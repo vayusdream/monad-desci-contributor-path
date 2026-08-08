@@ -187,94 +187,7 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 
 ---
 
-## 十、跑起来（本地开发）
-
-```bash
-npm install
-cp .env.local.example .env.local   # 先不填也能跑，WalletConnect 扫码连接除外
-npm run dev
-```
-
-打开 http://localhost:3000，即可走完整个 5 步流程 UI（铸造凭证需要先部署合约、填好合约地址，见下一节）。
-
-**演示账号说明**：本项目不使用账号密码登录，全部通过钱包连接（MetaMask / WalletConnect / 浏览器注入式钱包）完成身份识别与铸造操作，因此没有预置的演示账号。评审时只需准备一个已连接 Monad Testnet、并领取少量测试币 MON 的钱包地址即可。
-
----
-
-## 十一、部署合约到 Monad Testnet
-
-### 1. 环境准备
-
-```bash
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
-
-cd contracts
-npm install                          # 装 OpenZeppelin
-forge install foundry-rs/forge-std   # 装测试框架
-```
-
-### 2. 配置部署账号
-
-```bash
-cp .env.example .env
-```
-
-编辑 `contracts/.env`：
-- `PRIVATE_KEY`：一个测试网小号的私钥（**不要用主钱包**），记得先去水龙头领一点 MON 测试币
-- `MONAD_TESTNET_RPC_URL`：部署前对照 [Monad 官方文档](https://docs.monad.xyz) 核实最新 RPC 地址（测试网参数可能随官方升级变化）
-
-### 3. 编译 + 测试
-
-```bash
-forge build
-forge test -vv
-```
-
-### 4. 部署
-
-```bash
-source .env
-forge script script/Deploy.s.sol \
-  --rpc-url "$MONAD_TESTNET_RPC_URL" \
-  --broadcast
-```
-
-终端会打印出合约地址，例如：
-
-```
-ContributorCredential deployed at: 0xABCD...
-```
-
-把这个地址填进项目根目录的 `.env.local`：
-
-```
-NEXT_PUBLIC_CONTRACT_ADDRESS=0xABCD...
-```
-
-（如果 Monad 区块浏览器支持 Etherscan 风格验证，可以在部署命令后加 `--verify`，并在 `.env` 里填好 `MONAD_EXPLORER_API_KEY` / `MONAD_EXPLORER_VERIFY_URL`。）
-
----
-
-## 十二、部署前端
-
-推荐 Vercel，几分钟内可上线：
-
-```bash
-npm install -g vercel
-vercel login
-vercel --prod
-```
-
-部署时在 Vercel 项目设置里配置环境变量（与 `.env.local` 一致）：
-- `NEXT_PUBLIC_CONTRACT_ADDRESS`
-- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`（去 https://cloud.walletconnect.com 免费申请一个，几十秒）
-
-也可以用 Cloudflare Pages（`npx wrangler pages deploy`），流程类似。
-
----
-
-## 十三、Demo 演示脚本建议
+## 十、Demo 演示
 
 1. 打开首页 → 选择一个方向（如 Builder）
 2. 展示推荐的学习内容 + 项目卡片
@@ -282,18 +195,11 @@ vercel --prod
 4. 提交一个 proof 链接（可以现场用一个真实的 GitHub Issue 链接）
 5. 连接钱包 → 一键切换到 Monad Testnet（如果钱包当前不在这条链）→ 点击铸造
 6. 交易确认后展示凭证 + 区块浏览器链接，证明这是一个真实的链上 NFT
+**演示账号说明**：本项目不使用账号密码登录，全部通过钱包连接（MetaMask / WalletConnect / 浏览器注入式钱包）完成身份识别与铸造操作，因此没有预置的演示账号。评审时只需准备一个已连接 Monad Testnet、并领取少量测试币 MON 的钱包地址即可。
 
 ---
 
-## 十四、已知依赖坑
-
-`package.json` 里有一条 `overrides: { "@wagmi/connectors": "6.1.0" }`，**请不要随手删掉**。
-
-原因：RainbowKit 默认钱包列表会引入 Coinbase 的 Base Account 连接器，它依赖 `@coinbase/cdp-sdk`，而该 SDK 较新版本引用了尚未完整发布的 `@x402/*` 子包。`next dev` 下懒加载不会触发，但 `next build` 会把所有动态 import 静态打包，直接报 `Module not found`。锁定 `@wagmi/connectors@6.1.0`（对应更早版本的 `@base-org/account`，不依赖 cdp-sdk）可以绕开这条链路。如果未来要升级 wagmi/RainbowKit，记得先跑一次 `npm run build` 确认没有复现这个问题。
-
----
-
-## 十五、生产化 TODO（评委 Q&A 可以主动提）
+## 十一、生产化 TODO
 
 当前为了短周期内交付可运行 demo，做了以下简化，生产环境需要补上：
 
