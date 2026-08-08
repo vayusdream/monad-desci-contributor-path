@@ -17,14 +17,14 @@ export function Step2LearnRecommend() {
       <div className="mb-10 text-center">
         <Tag dotColor={track.accent}>Step 2 · {track.name} Track</Tag>
         <h1 className="mt-4 font-serif-cjk text-3xl font-bold text-ink sm:text-4xl">
-          推荐的<span className="text-terracotta">学习内容</span> + 项目
+          推荐的<span className="text-terracotta">学习内容</span>与项目
         </h1>
         <p className="mt-3 text-ink-soft">{track.description}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>
-          <h2 className="mb-3 font-mono-tag text-xs uppercase tracking-wide text-ink-soft">
+          <h2 className="mb-3 font-mono-tag text-sm font-bold uppercase tracking-wide text-ink">
             学习内容
           </h2>
           <div className="space-y-3">
@@ -46,7 +46,7 @@ export function Step2LearnRecommend() {
         </div>
 
         <div>
-          <h2 className="mb-3 font-mono-tag text-xs uppercase tracking-wide text-ink-soft">
+          <h2 className="mb-3 font-mono-tag text-sm font-bold uppercase tracking-wide text-ink">
             推荐项目
           </h2>
           <div className="space-y-3">

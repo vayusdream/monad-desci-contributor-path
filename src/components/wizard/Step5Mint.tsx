@@ -89,10 +89,7 @@ export function Step5Mint() {
       </div>
 
       <Card className="flex flex-col items-center gap-6 text-center">
-        <BadgePreview
-          trackName={track.name}
-          accent={track.accent}
-        />
+        <BadgePreview trackId={track.id} trackName={track.name} />
 
         {minted ? (
           <div className="w-full space-y-3">
