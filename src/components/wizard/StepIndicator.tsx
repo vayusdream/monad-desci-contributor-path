@@ -3,11 +3,11 @@
 import { WizardStep } from "@/lib/store";
 
 const STEPS: { id: WizardStep; label: string }[] = [
-  { id: 1, label: "选择方向" },
+  { id: 1, label: "方向选择" },
   { id: 2, label: "学习推荐" },
   { id: 3, label: "完成任务" },
   { id: 4, label: "提交 Proof" },
-  { id: 5, label: "铸造凭证" },
+  { id: 5, label: "铸造NFT" },
 ];
 
 export function StepIndicator({ current }: { current: WizardStep }) {

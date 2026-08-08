@@ -16,6 +16,7 @@ export interface TrackTask {
   type: string;
   title: string;
   summary: string;
+  summaryLink?: { text: string; url: string };
   estMinutes: number;
   acceptance: string[];
   submissionHint: string;
@@ -38,8 +39,8 @@ export interface Track {
 export const TRACKS: Record<TrackId, Track> = {
   research: {
     id: "research",
-    name: "Research",
-    nameEn: "Research",
+    name: "Researcher",
+    nameEn: "Researcher",
     tagline: "把你的第一篇 Research Note 留在链上",
     description:
       "从阅读一篇开放科学论文开始,学会用最小成本产出一份可被引用的研究笔记。",
@@ -48,44 +49,48 @@ export const TRACKS: Record<TrackId, Track> = {
     avgHours: "2–3 小时",
     resources: [
       {
-        title: "DeSci 是什么:一次说清楚",
+        title: "DeSci 是什么",
         desc: "十分钟了解去中心化科学解决的三个系统性问题",
-        url: "https://example.org/desci-101",
+        url: "https://desci-onboarding-hub.pages.dev/",
       },
       {
-        title: "如何写一份可被引用的 Research Note",
+        title: "写一份可被引用的 Research Note",
         desc: "结构、引用规范与链上存证的最小实践",
-        url: "https://example.org/research-note-guide",
+        url: "https://ethereum.org/zh/desci/#publishing",
       },
       {
         title: "开放科学数据集入门",
         desc: "认识 DeSci 生态里常见的开放数据集与检索方式",
-        url: "https://example.org/open-data-101",
+        url: "https://ethereum.org/zh/desci/#data-storage",
       },
     ],
     projects: [
       { name: "Molecule", desc: "IP-NFT 驱动的生物医药众筹协议", url: "https://molecule.xyz" },
       { name: "ResearchHub", desc: "开放同行评审与研究激励平台", url: "https://researchhub.com" },
-      { name: "DeSci Labs", desc: "去中心化论文出版基础设施", url: "https://desci.com" },
+      { name: "DeScier", desc: "去中心化科研资金、实验室与开放出版平台", url: "https://descier.science/" },
     ],
     task: {
       type: "Research Note",
-      title: "为一篇开放科学论文写一份 300 字研究笔记",
+      title: "认领《DeSci自学手册》一个章节或案例,写下你的专业视角",
       summary:
-        "任选一篇 DeSci 相关的开放获取论文或研究,提炼核心结论、方法与你的一个观察,写成一份结构化的 Research Note。",
+        "从《DeSci自学手册》中认领一个你感兴趣的章节或案例,结合自己的专业背景(科研、工程、医学、法律、社区运营等皆可),写一份 300 字以上的见解笔记——可以是补充说明、提出质疑、案例延展或跨领域类比,不需要复述原文。",
+      summaryLink: {
+        text: "《DeSci自学手册》",
+        url: "https://equable-mountain-09d.notion.site/DeSci-3523ad5edf5c80809d20e9591cbaf8c8#3523ad5edf5c801e882dccd920c58f96",
+      },
       estMinutes: 90,
       acceptance: [
-        "包含论文/研究来源链接",
-        "至少 300 字,包含结论、方法、你的评论三部分",
+        "注明你认领的章节或案例名称",
+        "至少 300 字,包含你从自身专业角度出发的具体见解(非简单复述原文)",
         "使用中文或英文均可,逻辑清晰、非 AI 直接复制摘要",
       ],
-      submissionHint: "粘贴你的 Research Note 全文链接(Notion / Mirror / GitHub 均可)",
+      submissionHint: "粘贴你的见解笔记全文链接(Notion / Mirror / GitHub 均可)",
     },
   },
   science: {
     id: "science",
-    name: "Science",
-    nameEn: "Science",
+    name: "Translator",
+    nameEn: "Translator",
     tagline: "把一篇硬核内容翻译给更多人看懂",
     description:
       "DeSci 最大的门槛是语言与术语。用一次翻译,帮助更多华语读者跨进这个领域。",
@@ -96,22 +101,22 @@ export const TRACKS: Record<TrackId, Track> = {
       {
         title: "DeSci 术语速查表",
         desc: "IP-NFT、RetroPGF、QF 等高频词的准确译法",
-        url: "https://example.org/desci-glossary",
+        url: "https://learnblockchain.cn/article/10016",
       },
       {
         title: "科学写作的可读性原则",
         desc: "如何把硬核内容翻译得既准确又好读",
-        url: "https://example.org/sci-writing",
+        url: "https://zhuanlan.zhihu.com/p/62292866",
       },
       {
         title: "DeSci 自学手册",
         desc: "一份华语 DeSci 入门公共财,适合作为翻译素材库",
-        url: "https://desci-onboarding-hub.pages.dev",
+        url: "https://equable-mountain-09d.notion.site/DeSci-3523ad5edf5c80809d20e9591cbaf8c8#3523ad5edf5c801e882dccd920c58f96",
       },
     ],
     projects: [
       { name: "VitaDAO", desc: "长寿研究领域的去中心化资助 DAO", url: "https://vitadao.com" },
-      { name: "LabDAO", desc: "共享科研基础设施与协作工具", url: "https://labdao.xyz" },
+      { name: "AxonDAO", desc: "去中心化 AI 科研平台,数据与算力共建", url: "https://www.axondao.io/" },
       { name: "Bio.xyz", desc: "DeSci 生物科技孵化与加速平台", url: "https://bio.xyz" },
     ],
     task: {
@@ -125,7 +130,7 @@ export const TRACKS: Record<TrackId, Track> = {
         "术语翻译与术语表一致或有合理说明",
         "300–500 字,语句通顺、无机翻痕迹",
       ],
-      submissionHint: "提交译文链接或文档,附上原文出处",
+      submissionHint: "提交译文链接或文档，附上原文出处",
     },
   },
   builder: {
@@ -140,24 +145,24 @@ export const TRACKS: Record<TrackId, Track> = {
     avgHours: "2–4 小时",
     resources: [
       {
-        title: "如何找到适合新手的 Issue",
-        desc: "识别 good-first-issue / help-wanted 标签的实用技巧",
-        url: "https://example.org/find-good-first-issue",
+        title: "DeSci 项目全景与参与入口",
+        desc: "浏览活跃的 DeSci 项目与 DAO,找到贡献切入点",
+        url: "https://ethereum.org/zh/desci/#get-involved",
       },
       {
-        title: "写一份高质量 PR 描述",
-        desc: "让 maintainer 一眼看懂你做了什么、为什么这么做",
-        url: "https://example.org/pr-writing",
+        title: "开放科研数据仓库",
+        desc: "了解 Zenodo 背后的开源软件 InvenioRDM,理解 FAIR(可发现/可访问/可互操作/可复用)数据原则如何落地",
+        url: "https://inveniosoftware.org/products/rdm/",
       },
       {
-        title: "Solidity 与 EVM 开发入门",
-        desc: "如果你想直接参与链上代码贡献,从这里开始",
-        url: "https://example.org/solidity-101",
+        title: "去中心化科研出版",
+        desc: "理解 DeSci Codex 用 IPFS 持久化标识符解决论文链接失效的设计思路",
+        url: "https://www.desci.com/blog/how-desci-codex-makes-scientific-research-durable-reusable-and-ai-ready",
       },
     ],
     projects: [
       { name: "DeSci Labs", desc: "开源论文出版协议栈,长期招募贡献者", url: "https://github.com/desci-labs" },
-      { name: "Molecule Protocol", desc: "IP-NFT 智能合约与前端均开源", url: "https://github.com/moleculeprotocol" },
+      { name: "Zenodo (InvenioRDM)", desc: "CERN 主导的开源科研数据仓库平台,Zenodo 的底层代码,长期开放 Issue 和 PR", url: "https://github.com/zenodo/zenodo-rdm" },
       { name: "OpenAlex", desc: "开放学术图谱数据基础设施", url: "https://github.com/ourresearch" },
     ],
     task: {
@@ -176,8 +181,8 @@ export const TRACKS: Record<TrackId, Track> = {
   },
   community: {
     id: "community",
-    name: "Community",
-    nameEn: "Community",
+    name: "Founder",
+    nameEn: "Founder",
     tagline: "帮助下一个人更快地走完这条路",
     description:
       "写一篇引导帖、回答一个新人问题、组织一次线上分享,都是社区最稀缺的贡献。",
@@ -188,23 +193,23 @@ export const TRACKS: Record<TrackId, Track> = {
       {
         title: "DeSci 社区地图",
         desc: "常见的 Discord / Telegram / 论坛,以及各自的活跃话题",
-        url: "https://example.org/desci-community-map",
+        url: "https://equable-mountain-09d.notion.site/DeSci-3523ad5edf5c80809d20e9591cbaf8c8#3523ad5edf5c801e882dccd920c58f96",
       },
       {
         title: "如何写一篇有价值的科普帖",
         desc: "面向零背景读者的内容结构建议",
-        url: "https://example.org/community-writing",
+        url: "https://equable-mountain-09d.notion.site/DeSci-3523ad5edf5c80809d20e9591cbaf8c8#3523ad5edf5c801e882dccd920c58f96",
       },
       {
         title: "线上分享活动组织清单",
         desc: "从选题到复盘的最小可行流程",
-        url: "https://example.org/host-a-talk",
+        url: "https://equable-mountain-09d.notion.site/DeSci-3523ad5edf5c80809d20e9591cbaf8c8#3523ad5edf5c801e882dccd920c58f96",
       },
     ],
     projects: [
-      { name: "DeSci Asia", desc: "亚太地区 DeSci 社区枢纽", url: "https://example.org/desci-asia" },
+      { name: "DeSci Asia", desc: "亚太地区 DeSci 社区枢纽", url: "https://x.com/DeSciAsia" },
       { name: "Artizen", desc: "面向公共物品的众筹与提案平台", url: "https://artizen.fund" },
-      { name: "DeSci World", desc: "全球 DeSci 项目与活动聚合站", url: "https://example.org/desci-world" },
+      { name: "DeSci World", desc: "全球 DeSci 项目与活动聚合站", url: "https://desci.world/" },
     ],
     task: {
       type: "内容贡献",

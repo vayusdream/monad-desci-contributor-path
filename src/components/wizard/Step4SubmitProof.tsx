@@ -13,6 +13,7 @@ export function Step4SubmitProof() {
   const submitProof = useWizardStore((s) => s.submitProof);
   const [link, setLink] = useState("");
   const [note, setNote] = useState("");
+  const [formDone, setFormDone] = useState(false);
   const [error, setError] = useState("");
 
   if (!trackId) return null;
@@ -22,6 +23,10 @@ export function Step4SubmitProof() {
     e.preventDefault();
     if (!link.trim() || !/^https?:\/\//.test(link.trim())) {
       setError("请填写一个有效的链接(以 http:// 或 https:// 开头)");
+      return;
+    }
+    if (!formDone) {
+      setError("请先完成贡献者 NFT 申请表格的填写,并勾选确认");
       return;
     }
     setError("");
@@ -64,6 +69,31 @@ export function Step4SubmitProof() {
               className="w-full resize-none rounded-md border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none focus:border-navy"
             />
           </div>
+          <div className="rounded-md border border-line bg-paper p-4">
+            <p className="text-sm font-medium text-ink">
+              贡献者 NFT 申请表格(必填)
+            </p>
+            <p className="mt-1 text-sm text-ink-soft">
+              为方便人工审核与后续 NFT 发放,请先填写这份申请表格,再回来完成提交。
+            </p>
+            <a
+              href="https://docs.google.com/forms/d/15GTTqehq8lZ9rE1ztPBH9A6wCy1T8xO-wGgTavt0nEs/edit"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-block text-sm text-navy underline decoration-line hover:text-terracotta"
+            >
+              打开申请表格 →
+            </a>
+            <label className="mt-3 flex items-start gap-2 text-sm text-ink">
+              <input
+                type="checkbox"
+                checked={formDone}
+                onChange={(e) => setFormDone(e.target.checked)}
+                className="mt-0.5"
+              />
+              我已完成贡献者 NFT 申请表格的填写
+            </label>
+          </div>
           {error && <p className="text-sm text-terracotta">{error}</p>}
           <div className="flex justify-center gap-3 pt-2">
             <Button
@@ -79,7 +109,7 @@ export function Step4SubmitProof() {
       </Card>
 
       <p className="mt-4 text-center text-xs text-ink-soft">
-        Demo 版本:提交后直接进入 mint 环节。生产版本会加入人工/自动审核门槛。
+        提交后将直接进入 mint 环节,后续版本会加入人工/自动审核门槛。
       </p>
     </div>
   );

@@ -1,10 +1,29 @@
 "use client";
 
-import { TRACKS } from "@/lib/tracks";
+import { TRACKS, TrackTask } from "@/lib/tracks";
 import { useWizardStore } from "@/lib/store";
 import { Card } from "../ui/Card";
 import { Tag } from "../ui/Tag";
 import { Button } from "../ui/Button";
+
+function renderSummary(summary: string, link?: TrackTask["summaryLink"]) {
+  if (!link || !summary.includes(link.text)) return summary;
+  const [before, after] = summary.split(link.text);
+  return (
+    <>
+      {before}
+      <a
+        href={link.url}
+        target="_blank"
+        rel="noreferrer"
+        className="text-navy underline decoration-line hover:text-terracotta"
+      >
+        {link.text}
+      </a>
+      {after}
+    </>
+  );
+}
 
 export function Step3Task() {
   const trackId = useWizardStore((s) => s.trackId);
@@ -32,7 +51,7 @@ export function Step3Task() {
           </span>
         </div>
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-          {task.summary}
+          {renderSummary(task.summary, task.summaryLink)}
         </p>
 
         <div className="mt-5 border-t border-line pt-5">

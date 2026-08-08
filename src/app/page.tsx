@@ -31,7 +31,7 @@ export default function Home() {
         {step === 5 && <Step5Mint />}
       </main>
       <footer className="border-t border-line py-6 text-center font-mono-tag text-xs text-ink-soft">
-        DeSci Contributor Path · Built for Monad Hackathon Demo
+        DeSci Contributor Path · Built for Monad Hackathon
       </footer>
     </>
   );

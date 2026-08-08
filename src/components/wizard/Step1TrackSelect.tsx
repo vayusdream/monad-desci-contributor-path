@@ -16,7 +16,7 @@ export function Step1TrackSelect() {
           选择你的<span className="text-terracotta">方向</span>
         </h1>
         <p className="mt-3 text-ink-soft">
-          不需要背景,只需要一个真实的开始。选一个最吸引你的方向。
+          只需要一个真实的开始。选一个最吸引你的 DeSci 方向。
         </p>
       </div>
 
