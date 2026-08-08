@@ -209,6 +209,6 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 * **Soulbound**：Contributor Credential 作为身份类凭证，更适合做成不可转让（重写 `_update` 拦截非 mint/burn 的转账）
 * **多链 / 主网切换**：合约与前端均为链无关设计，后续切 Monad 主网只需替换 `src/lib/chains.ts` 与重新部署合约
 
-## 十七、许可证
+## 十二、许可证
 
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源，与 `contracts/src/ContributorCredential.sol` 中声明的 SPDX 许可证一致。
