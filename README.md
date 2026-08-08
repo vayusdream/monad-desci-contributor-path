@@ -8,34 +8,47 @@ DeSci Contributor Path 是一个面向 DeSci（去中心化科学）新人的贡
 
 DeSci Contributor Path 不是一个交易市场，也不是通用的任务众包平台。
 
-它更接近一个：
-
-**新人引导手册 + 贡献任务清单 + 链上履历凭证**
+它更接近一个：**新人引导手册 + 贡献任务清单 + 链上履历凭证**
 
 我们试图回答一个真实问题：
-
 * DeSci 是一个专业门槛很高、术语密集的领域，大多数感兴趣的人卡在「不知道第一步该做什么」；
 * 但如果只是丢一堆资料链接，新人依然不会真正产出任何东西，也无法证明自己「做过」什么；
 * 因此，Contributor Path 把「了解 DeSci」压缩成一次可在几十分钟到几小时内完成的具体任务，并用链上凭证把这次真实产出永久记录下来。
 
-## 三、我们为什么需要这样一个系统
+## 三、产品生态与架构 (Product Ecosystem & Architecture)
+
+本项目采用用“**链下社区运营孵化 + 链上凭证结算**”的双层架构的双层架构，构建 DeSci 贡献者的完整成长飞轮：
+
+1. **DeSci Contributor Path (Core DApp / 链上凭证结算中心)**
+   - 🔗 **Demo 体验地址**: [DeSci Contributor Path](https://descimod.vercel.app/)
+   - **定位**: 部署在 Monad 测试网上的核心 Web3 应用层。
+   - **作用**: 提供 5 步标准化引导流程，负责贡献证明 (Proof) 的最终校验提交，并在 Monad 链上现场生成并铸造不可篡改的 Contributor Credential (ERC-721) NFT。
+
+2. **DeSci Onboarding Hub (Zealy / 社区任务孵化池)**
+   - 🔗 **社区任务池**: [DeSci Onboarding Hub on Zealy](https://zealy.io/cw/descionboardinghub/questboard?invitationId=RcuP9tK3G_hRrmEHBmUgw)
+   - **定位**: 社区日常高频 Quest 分发与生态增长引擎。
+   - **作用**: 提供更丰富细分的日常任务（如 Peer Review、项目分析、翻译、Grant 申请等），结合 XP 积分排行榜与周期性 Prize 抽奖，作为 DApp 的流量入口与链下任务源。
+
+**生态协同飞轮：**
+
+> **Zealy 任务池 (流量/低门槛参与)** ➔ 用户在社区完成细分 Quest 积累 XP ➔ 前往 **Core DApp (链上结算)** 提交最终 Proof ➔ 在 **Monad 链上铸造专属 Credential NFT** 沉淀可信履历。
+
+## 四、我们为什么需要这样一个系统
 
 DeSci 生态里，新人的第一次参与通常是这样的：
-
 * 加入了几个 Discord / Telegram，看了很多帖子，但没有产出
 * 想找一个开源仓库贡献代码，但不知道从哪个 issue 开始
 * 想翻译一篇文章帮助中文用户，但不确定标准该翻多长、翻多准
 * 想写一篇研究笔记，但没有人告诉他这算不算「入门贡献」
 
 如果没有一套明确的路径，容易出现三类问题：
-
 1. **门槛不透明**：新人不知道「完成什么」才算迈出了第一步
 2. **产出不可见**：即便认真做了一件事，也没有地方证明「我做过」
 3. **信任难以积累**：后续想申请 DAO 资助、加入核心团队时，没有可验证的历史记录可以展示
 
 Contributor Path 的目标不是替代 DeSci 各个项目自己的贡献者体系，而是提供一个更低门槛的「第一步」——一次任务、一份证明、一枚链上凭证。
 
-## 四、核心设计理念
+## 五、核心设计理念
 
 ### 1. 凭证不能购买，只能通过真实任务获得
 
@@ -47,16 +60,15 @@ Contributor Credential 不是可以直接 mint 出来炫耀的收藏品。合约
 
 ### 3. 赛道即身份路径，不是难度分级
 
-Researcher / Translator / Builder / Founder 四条赛道，代表四种不同背景的人进入 DeSci 的方式，而不是「新手/进阶/高手」的分级。一个纯文科背景的人可以从 Translator 开始,一个工程师可以直接从 Builder 开始——路径由背景决定，而不是由能力门槛决定。
+Researcher / Translator / Builder / Founder 四条赛道，代表四种不同背景的人进入 DeSci 的方式，而不是「新手/进阶/高手」的分级。一个纯文科背景的人可以从 Translator 开始，一个工程师可以直接从 Builder 开始——路径由背景决定，而不是由能力门槛决定。
 
 ### 4. 凭证完全链上生成，公开可验证
 
 Contributor Credential 的 metadata 与 SVG 图片全部在合约里现场生成（Base64 编码，不依赖 IPFS），任何人都可以直接从链上读出一枚凭证对应的赛道、颜色和铸造时间，不需要信任任何中心化的图床或索引服务。
 
-## 五、当前系统已经在链上实现了什么
+## 六、当前系统已经在链上实现了什么
 
 在当前 Monad Testnet 版本中，`ContributorCredential` 合约已经支持：
-
 * 基于 OpenZeppelin ERC-721 的凭证合约，四条赛道（Research / Science / Builder / Community）以枚举区分
 * `mint(track)`：按赛道铸造凭证，每个地址每条赛道限铸一次（`hasMinted` 记录）
 * 完全链上生成的 `tokenURI`：JSON metadata + 内联 SVG 图片，均以 Base64 编码直接返回，不依赖任何外部存储
@@ -65,10 +77,9 @@ Contributor Credential 的 metadata 与 SVG 图片全部在合约里现场生成
 
 因此它已经不是一个「只有 UI 的外壳」，而是一个有真实链上状态、真实读写流程和真实铸造限制的可运行原型。
 
-## 六、前端应用已经实现什么
+## 七、前端应用已经实现什么
 
 当前前端已经实现：
-
 * Monad Testnet 连接与网络配置
 * 通过 RainbowKit 接入 MetaMask / WalletConnect / 浏览器注入式钱包
 * 完整的五步向导 UI：选择方向 → 学习推荐 → 任务详情 → 提交贡献证明 → 铸造凭证
@@ -78,15 +89,13 @@ Contributor Credential 的 metadata 与 SVG 图片全部在合约里现场生成
 * 已铸造状态检测（`hasMinted` 只读调用）与铸造成功后的区块浏览器交易链接
 * 徽章预览组件与「体验另一个方向」的重置入口
 
-整体上，前端已经形成一条完整的：
-**首页引导 → 钱包连接 → 选方向学习 → 完成任务提交证明 → 链上铸造凭证** 的闭环体验。
+整体上，前端已经形成一条完整的：**首页引导 → 钱包连接 → 选方向学习 → 完成任务提交证明 → 链上铸造凭证** 的闭环体验。
 
-## 七、主要亮点
+## 八、主要亮点
 
 ### 1. 更接近真实入门路径，而不是空泛的资料合集
 
 Contributor Path 的核心不是「甩给你一堆链接」，而是：
-
 * 必须完成一次具体、可核验的任务
 * 必须提交一个真实存在的成果链接作为证明
 * 每条赛道每人只能获得一枚凭证，避免刷量
@@ -97,7 +106,6 @@ Contributor Path 的核心不是「甩给你一堆链接」，而是：
 ### 2. 让「第一次贡献」变得可见、可证明
 
 很多人对 DeSci 的第一次参与，往往就此沉没：
-
 * 写过一段翻译，但没有地方证明「我翻译过」
 * 提过一个 issue，但没有和身份关联起来
 * 读完一篇论文写了笔记，但笔记散落在自己的笔记软件里
@@ -107,7 +115,6 @@ Contributor Path 把这些「第一次」收敛成一枚链上凭证——它比
 ### 3. 链上负责记录事实，人负责判断质量
 
 我们没有让合约去评判任务完成得好不好。分工是：
-
 * **链上负责**：谁在什么时候、针对哪条赛道，被授权铸造了凭证，以及这枚凭证本身是否可验证
 * **人（审核环节）负责**：判断这次提交是否达到验收标准
 
@@ -117,14 +124,13 @@ Contributor Path 把这些「第一次」收敛成一枚链上凭证——它比
 
 Contributor Path 并不需要把每一次学习行为都放上链，只把最关键的事实放上链：赛道选择、任务完成、凭证铸造。对于这种高频小额、但需要公开可验证的场景，Monad 提供了合适的底层环境：兼容 EVM、可直接用标准钱包接入、结算快，适合承载大量新人涌入时的铸造请求。
 
-## 八、使用场景
+## 九、使用场景
 
 ### 场景 1：完全没接触过 DeSci 的新人
 
 适合：对去中心化科学感兴趣、但不知道从哪开始的开发者、研究者、内容创作者。
 
 例子：
-
 * 打开首页，选择 Translator 方向
 * 阅读推荐的术语表和写作原则
 * 翻译一段 300–500 字的英文 DeSci 内容
@@ -138,7 +144,6 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 适合：有一定工程能力、但不熟悉 DeSci 项目生态的开发者。
 
 例子：
-
 * 选择 Builder 方向，浏览推荐的 DeSci 开源仓库（DeSci Labs、Molecule Protocol、OpenAlex 等）
 * 提交一个真实、可验证的 Issue 或 PR 链接作为贡献证明
 * 铸造凭证后，这枚凭证成为该开发者在 DeSci 生态里「已经真实贡献过」的第一份链上履历
@@ -148,7 +153,6 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 适合：科研、工程、医学、法律等背景，希望留下自己专业视角笔记的人。
 
 例子：
-
 * 选择 Researcher 方向，认领《DeSci 自学手册》中的一个章节或案例
 * 写一份 300 字以上、体现自身专业视角的见解笔记（而非复述原文）
 * 提交笔记链接并铸造凭证，作为这次专业输出的存证
@@ -157,21 +161,19 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 
 当前版本主要面向单人完成单条赛道任务的场景。未来如果与具体 DAO 或资助计划建立合作，Contributor Credential 也可以作为申请材料的一部分——「已完成过一次真实小任务并被记录在链上」本身就是比自我陈述更可信的信号。这不是当前 MVP 的重点，但说明了这套凭证体系向外扩展的空间。
 
-## 九、技术实现概览
+## 十、技术实现概览
 
 **前端**
-
 * Next.js 16（App Router）
 * React 19 + TypeScript
 * Tailwind CSS 4
 * wagmi + viem
-* RainbowKit（MetaMask / WalletConnect / 注入式钱包）
+* RainbowKit（MetaMask / WalletConnect / 浏览器注入式钱包）
 * @tanstack/react-query
 * zustand（五步向导状态管理）
 * Vercel / Cloudflare Pages 部署
 
 **链上**
-
 * Monad Testnet
 * Solidity ^0.8.24 + Foundry
 * 单合约结构 `ContributorCredential`（继承 OpenZeppelin ERC-721）
@@ -180,7 +182,6 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 * `CredentialMinted` 事件记录
 
 **当前架构特点**
-
 * 前端为无后端的静态应用，任务与学习资源当前以代码内常量（`src/lib/tracks.ts`）维护
 * 核心可信状态（是否已铸造、凭证内容）来自 Monad 链上合约，而非数据库
 * 审核环节当前依赖外部表单 + 人工确认，尚未接入自动化审核后端
@@ -203,13 +204,11 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 
 当前为了短周期内交付可运行 demo，做了以下简化，生产环境需要补上：
 
-- **审核门槛**：mint 前应由后端校验 proof 是否被人工/自动审核通过，并用 EIP-712 签名授权 mint，防止绕过前端直接调用合约
-- **内容管理**：`src/lib/tracks.ts` 目前是写死的 mock 数据，生产环境应接入 CMS 或数据库，便于持续运营
-- **Soulbound**：Contributor Credential 作为身份类凭证，更适合做成不可转让（重写 `_update` 拦截非 mint/burn 的转账）
-- **多链 / 主网切换**：合约与前端均为链无关设计，后续切 Monad 主网只需替换 `src/lib/chains.ts` 与重新部署合约
+* **审核门槛**：mint 前应由后端校验 proof 是否被人工/自动审核通过，并用 EIP-712 签名授权 mint，防止绕过前端直接调用合约
+* **内容管理**：`src/lib/tracks.ts` 目前是写死的 mock 数据，生产环境应接入 CMS 或数据库，便于持续运营
+* **Soulbound**：Contributor Credential 作为身份类凭证，更适合做成不可转让（重写 `_update` 拦截非 mint/burn 的转账）
+* **多链 / 主网切换**：合约与前端均为链无关设计，后续切 Monad 主网只需替换 `src/lib/chains.ts` 与重新部署合约
 
----
+## 十七、许可证
 
-## 十六、许可证
-
-本项目采用 [MIT License](LICENSE) 开源，与 `contracts/src/ContributorCredential.sol` 中声明的 SPDX 许可证一致。
+本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源，与 `contracts/src/ContributorCredential.sol` 中声明的 SPDX 许可证一致。
