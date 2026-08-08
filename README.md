@@ -2,7 +2,7 @@
 
 ## 一、项目一句话介绍
 
-DeSci Contributor Path 是一个面向 DeSci（去中心化科学）新人的贡献引导与凭证系统：把「选方向、学基础、完成一次真实小任务、提交成果证明」这条本来模糊、无人记录的入门路径，变成一条清晰的五步流程，并在 Monad 链上为每一次真实完成的贡献铸造一枚公开可验证的 Contributor Credential（ERC-721），作为该用户在 DeSci 生态里的第一份可信履历。
+DeSci Contributor Path 是一个面向 DeSci（去中心化科学）新人的贡献引导与凭证系统。项目采用“Zealy 社区任务孵化 + Monad 链上凭证结算”的双层架构：以 Zealy 社区任务池作为低门槛入口，将选方向、学基础、完成真实小任务、提交证明的流程标准化，并在 Monad 链上为每一次真实产出现场铸造公开可验证的 Contributor Credential（ERC-721），作为该用户在 DeSci 生态里的第一份链上可信履历。
 
 ## 二、项目定位
 
