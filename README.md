@@ -208,6 +208,7 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 * **内容管理**：`src/lib/tracks.ts` 目前是写死的 mock 数据，生产环境应接入 CMS 或数据库，便于持续运营
 * **Soulbound**：Contributor Credential 作为身份类凭证，更适合做成不可转让（重写 `_update` 拦截非 mint/burn 的转账）
 * **多链 / 主网切换**：合约与前端均为链无关设计，后续切 Monad 主网只需替换 `src/lib/chains.ts` 与重新部署合约
+网页交互版本优化共享文档：https://docs.qq.com/sheet/DWW5YeVRIbGJPVm1t?tab=BB08J2
 
 ## 十二、许可证
 
