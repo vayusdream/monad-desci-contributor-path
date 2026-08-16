@@ -194,7 +194,64 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 
 ---
 
-## 十、Demo 演示
+## 十一、本地开发与部署
+
+### 本地跑起来
+
+```bash
+npm install
+cp .env.local.example .env.local   # 先不填也能跑，WalletConnect 扫码连接除外
+npm run dev
+```
+
+打开 http://localhost:3000 即可走完整个 5 步流程 UI。完整走完 Step 4 → Step 5（提交证明 → 铸造）还需要在 `.env.local` 里配置 `ATTESTOR_PRIVATE_KEY`（审核后端签发铸造授权用的私钥），否则 `/api/attest` 会报错。
+
+访问 `/admin`，用 `.env.local` 里配置的 `ADMIN_SECRET` 登录后可以看到所有提交记录，并对可疑记录做「标记可疑」处理（不影响已经铸造的凭证，仅用于事后追溯）。
+
+### 部署合约到 Monad Testnet
+
+```bash
+cd contracts
+npm install                          # 装 OpenZeppelin
+forge install foundry-rs/forge-std   # 装测试框架
+cp .env.example .env
+```
+
+编辑 `contracts/.env`：
+* `PRIVATE_KEY`：一个测试网小号的私钥（**不要用主钱包**），先去水龙头领一点 MON 测试币
+* `ATTESTOR_ADDRESS`：审核后端签发铸造授权用的地址，会写死进合约（`immutable`，部署后不可更改），必须和后端 `ATTESTOR_PRIVATE_KEY` 是同一个密钥对
+* `MONAD_TESTNET_RPC_URL`：部署前对照 [Monad 官方文档](https://docs.monad.xyz) 核实最新 RPC 地址
+
+```bash
+forge build && forge test -vv
+source .env
+forge script script/Deploy.s.sol --rpc-url "$MONAD_TESTNET_RPC_URL" --broadcast
+```
+
+终端打印出的合约地址填进项目根目录 `.env.local` 的 `NEXT_PUBLIC_CONTRACT_ADDRESS`。
+
+### 部署前端
+
+推荐 Vercel，几分钟内可上线：
+
+```bash
+npm install -g vercel
+vercel login
+vercel --prod
+```
+
+部署时在 Vercel 项目设置里配置环境变量（与 `.env.local` 一致）：
+* `NEXT_PUBLIC_CONTRACT_ADDRESS`
+* `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`（去 https://cloud.walletconnect.com 免费申请一个，几十秒）
+* `ATTESTOR_PRIVATE_KEY`：对应部署合约时写入的 `ATTESTOR_ADDRESS`，仅服务端使用，切勿加 `NEXT_PUBLIC_` 前缀
+* `ADMIN_SECRET`：保护 `/admin` 和 `/api/admin/*` 的共享密钥，自己生成一串随机字符串即可
+* `KV_REST_API_URL` / `KV_REST_API_TOKEN`：Upstash Redis 的连接信息（Vercel Marketplace 装 Redis 集成会自动注入），不配置也能跑，但每次冷启动提交记录都会丢失
+
+也可以用 Cloudflare Pages（`npx wrangler pages deploy`），流程类似。
+
+---
+
+## 十二、Demo 演示
 
 1. 打开首页 → 选择一个方向（如 Builder）
 2. 展示推荐的学习内容 + 项目卡片
@@ -207,7 +264,7 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 
 ---
 
-## 十一、生产化 TODO
+## 十三、生产化 TODO
 
 当前为了短周期内交付可运行 demo，做了以下简化，生产环境需要补上：
 
@@ -219,6 +276,6 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 
 网页交互版本优化共享文档：https://docs.qq.com/sheet/DWW5YeVRIbGJPVm1t?tab=BB08J2
 
-## 十二、许可证
+## 十四、许可证
 
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源，与 `contracts/src/ContributorCredential.sol` 中声明的 SPDX 许可证一致。
