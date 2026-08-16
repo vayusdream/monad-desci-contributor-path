@@ -1,7 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useAccount } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { TRACKS } from "@/lib/tracks";
+import { TRACK_ENUM } from "@/lib/contract";
 import { useWizardStore } from "@/lib/store";
 import { Card } from "../ui/Card";
 import { Tag } from "../ui/Tag";
@@ -15,11 +18,15 @@ export function Step4SubmitProof() {
   const [note, setNote] = useState("");
   const [formDone, setFormDone] = useState(false);
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const { address, isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
 
   if (!trackId) return null;
   const track = TRACKS[trackId];
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!link.trim() || !/^https?:\/\//.test(link.trim())) {
       setError("请填写一个有效的链接(以 http:// 或 https:// 开头)");
@@ -29,8 +36,34 @@ export function Step4SubmitProof() {
       setError("请先完成贡献者 NFT 申请表格的填写,并勾选确认");
       return;
     }
+    if (!isConnected || !address) {
+      setError("请先连接钱包,贡献证明需要和你的地址关联才能审核铸造");
+      return;
+    }
     setError("");
-    submitProof({ link: link.trim(), note: note.trim() });
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/proofs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          address,
+          track: TRACK_ENUM[track.id],
+          link: link.trim(),
+          note: note.trim(),
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        setError(body?.error ?? "提交失败,请稍后重试");
+        return;
+      }
+      submitProof({ link: link.trim(), note: note.trim() });
+    } catch {
+      setError("网络错误,请检查连接后重试");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -94,6 +127,19 @@ export function Step4SubmitProof() {
               我已完成贡献者 NFT 申请表格的填写
             </label>
           </div>
+          {!isConnected && (
+            <p className="text-sm text-ink-soft">
+              贡献证明需要和钱包地址关联,
+              <button
+                type="button"
+                onClick={() => openConnectModal?.()}
+                className="text-navy underline decoration-line hover:text-terracotta"
+              >
+                先连接钱包
+              </button>
+              。
+            </p>
+          )}
           {error && <p className="text-sm text-terracotta">{error}</p>}
           <div className="flex justify-center gap-3 pt-2">
             <Button
@@ -103,13 +149,15 @@ export function Step4SubmitProof() {
             >
               ← 返回任务
             </Button>
-            <Button type="submit">提交并去铸造凭证 →</Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "提交中…" : "提交并去铸造凭证 →"}
+            </Button>
           </div>
         </form>
       </Card>
 
       <p className="mt-4 text-center text-xs text-ink-soft">
-        提交后将直接进入 mint 环节,后续版本会加入人工/自动审核门槛。
+        提交后台会记录你的贡献证明,审核通过后即可在下一步铸造凭证。
       </p>
     </div>
   );
