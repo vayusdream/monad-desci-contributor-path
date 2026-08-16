@@ -12,9 +12,11 @@ export const monadTestnet = defineChain({
     default: { http: ["https://testnet-rpc.monad.xyz"] },
   },
   blockExplorers: {
+    // Etherscan 风格，匹配 contracts/foundry.toml 里的 [etherscan] 验证配置。
+    // 备选：https://testnet.monadvision.com（如果 monadscan 的验证 API 不兼容）
     default: {
       name: "Monad Explorer",
-      url: "https://testnet.monadexplorer.com",
+      url: "https://testnet.monadscan.com",
     },
   },
   testnet: true,

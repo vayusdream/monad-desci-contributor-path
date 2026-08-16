@@ -15,12 +15,24 @@ export const TRACK_ENUM: Record<TrackId, number> = {
   community: 3,
 };
 
+export const MINT_EIP712_TYPES = {
+  Mint: [
+    { name: "to", type: "address" },
+    { name: "track", type: "uint8" },
+    { name: "deadline", type: "uint256" },
+  ],
+} as const;
+
 export const contributorCredentialAbi = [
   {
     type: "function",
     name: "mint",
     stateMutability: "nonpayable",
-    inputs: [{ name: "track", type: "uint8" }],
+    inputs: [
+      { name: "track", type: "uint8" },
+      { name: "deadline", type: "uint256" },
+      { name: "signature", type: "bytes" },
+    ],
     outputs: [{ name: "tokenId", type: "uint256" }],
   },
   {

@@ -4,13 +4,15 @@ pragma solidity ^0.8.24;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 /// @title ContributorCredential
 /// @notice Soulbound-ish on-chain NFT issued to DeSci contributors after they
 ///         complete a real, small task in one of four tracks. Metadata and
 ///         artwork are generated fully on-chain (no IPFS dependency) so the
 ///         credential is self-contained and always resolvable.
-contract ContributorCredential is ERC721 {
+contract ContributorCredential is ERC721, EIP712 {
     enum Track {
         Research,
         Science,
@@ -25,23 +27,49 @@ contract ContributorCredential is ERC721 {
 
     uint256 public nextTokenId = 1;
 
+    /// @notice Backend address whose EIP-712 signature is required to mint.
+    ///         Fixed at deploy time — a review backend signs an attestation
+    ///         per (address, track) after the user submits contribution
+    ///         proof on the site, so mint can no longer be called directly
+    ///         against the contract while skipping the site.
+    address public immutable attestor;
+
     mapping(uint256 => Credential) public credentials;
     mapping(address => mapping(Track => bool)) public hasMinted;
 
     string[4] private trackNames = ["Research", "Science", "Builder", "Community"];
     string[4] private trackColors = ["#1e3a5c", "#3f6b45", "#c0532d", "#8a5a9e"];
 
+    bytes32 private constant MINT_TYPEHASH =
+        keccak256("Mint(address to,uint8 track,uint256 deadline)");
+
     error AlreadyMinted();
+    error InvalidSignature();
+    error SignatureExpired();
 
     event CredentialMinted(address indexed to, uint256 indexed tokenId, Track track);
 
-    constructor() ERC721("DeSci Contributor Credential", "DESCI") {}
+    constructor(address _attestor)
+        ERC721("DeSci Contributor Credential", "DESCI")
+        EIP712("DeSci Contributor Credential", "1")
+    {
+        attestor = _attestor;
+    }
 
     /// @notice Mint a Contributor Credential for `track`. One per address per
-    ///         track. In this hackathon-demo build, mint is open — a
-    ///         production deployment should gate this behind a signed
-    ///         attestation from a review backend (see README).
-    function mint(Track track) external returns (uint256 tokenId) {
+    ///         track. Requires a valid EIP-712 `Mint` attestation signed by
+    ///         `attestor`, issued by the review backend after the user
+    ///         submits contribution proof on the site.
+    function mint(Track track, uint256 deadline, bytes calldata signature)
+        external
+        returns (uint256 tokenId)
+    {
+        if (block.timestamp > deadline) revert SignatureExpired();
+
+        bytes32 structHash = keccak256(abi.encode(MINT_TYPEHASH, msg.sender, uint8(track), deadline));
+        address signer = ECDSA.recover(_hashTypedDataV4(structHash), signature);
+        if (signer != attestor) revert InvalidSignature();
+
         if (hasMinted[msg.sender][track]) revert AlreadyMinted();
 
         tokenId = nextTokenId++;
