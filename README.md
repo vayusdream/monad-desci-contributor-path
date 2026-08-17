@@ -188,9 +188,45 @@ Contributor Path 并不需要把每一次学习行为都放上链，只把最关
 * 极简 `/admin` 审核后台，共享密钥（`ADMIN_SECRET`）鉴权，可对提交记录做「标记可疑」
 
 **当前架构特点**
+* 前端 / 审核后端 / 链上合约三层职责分离：前端只管交互与钱包连接，后端只管存证与签发铸造授权，合约只管校验签名与铸造限制（数据流见下图）
 * 任务与学习资源当前以代码内常量（`src/lib/tracks.ts`）维护
 * 核心可信状态（是否已铸造、凭证内容）来自 Monad 链上合约，而非数据库
 * 审核策略是「自动通过 + 事后人工抽查」，尚未接入更严格的自动化内容审核
+
+**架构图**
+
+```mermaid
+flowchart TD
+    subgraph Client["用户设备"]
+        Wallet["钱包<br/>MetaMask / WalletConnect"]
+        FE["Next.js 前端<br/>五步向导 UI"]
+    end
+
+    subgraph Backend["审核后端 · Next.js API Routes（Vercel）"]
+        ProofsAPI["POST /api/proofs"]
+        AttestAPI["POST /api/attest"]
+        AdminAPI["/api/admin/* + /admin 页面"]
+        Signer["viem EIP-712 签名<br/>ATTESTOR_PRIVATE_KEY 仅服务端"]
+    end
+
+    KV[("Upstash Redis<br/>提交记录持久化<br/>本地未配置时降级为内存")]
+
+    subgraph Chain["Monad Testnet"]
+        Contract["ContributorCredential.sol<br/>校验 attestor 签名 · hasMinted 限铸"]
+    end
+
+    Wallet <--> FE
+    FE -- "Step4 提交贡献证明" --> ProofsAPI
+    ProofsAPI -- "写入" --> KV
+    FE -- "Step5 请求铸造授权" --> AttestAPI
+    AttestAPI -- "查询已批准记录" --> KV
+    AttestAPI --> Signer
+    Signer -- "deadline + signature" --> FE
+    FE -- "mint(track, deadline, signature)" --> Contract
+    Contract -- "CredentialMinted 事件" --> FE
+    FE -. "/admin，ADMIN_SECRET 鉴权" .-> AdminAPI
+    AdminAPI -- "读取/标记" --> KV
+```
 
 ## 十一、生产化 TODO
 
